@@ -19,7 +19,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
     background: var(--bg);
     color: var(--ink);
     line-height: 1.55;
@@ -37,7 +37,15 @@
       center 40% / cover no-repeat,
       linear-gradient(160deg, #2e6e4e, #1f4f37);
   }
-  header.hero h1 { font-size: 1.7rem; letter-spacing: 0.5px; text-shadow: 0 2px 8px rgba(0,0,0,0.45); }
+  @font-face {
+    font-family: "Vintage Heirloom";
+    src: url("GreatVibes.ttf") format("truetype");
+    font-display: swap;
+  }
+  header.hero h1 {
+    font-family: "Vintage Heirloom", "Great Vibes", "Segoe Script", cursive;
+    font-size: 2.6rem; letter-spacing: 0.5px; text-shadow: 0 2px 8px rgba(0,0,0,0.45); font-weight: 400;
+  }
   header.hero p { color: #e6efe8; font-size: 0.95rem; margin-top: 6px; text-shadow: 0 1px 6px rgba(0,0,0,0.45); }
 
   /* Language selector */
@@ -82,15 +90,57 @@
     border: 2px solid var(--border); background: #fbfaf7;
     font-size: 1rem; font-weight: 600; cursor: pointer;
     color: var(--muted); transition: all .15s;
+    position: relative; overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
   }
-  .choice .emoji { display: block; font-size: 1.3rem; margin-bottom: 4px; }
+  .choice .emoji { display: block; font-size: 1.3rem; margin-bottom: 4px; transition: transform .2s cubic-bezier(.34,1.56,.64,1); }
+  .choice:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46,110,78,0.12); }
+  .choice:active { transform: scale(0.95); transition: transform .08s; }
   .choice.yes.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
   .choice.no.selected { border-color: var(--decline); background: var(--decline-soft); color: var(--decline); }
+  .choice.selected { animation: select-bounce .45s cubic-bezier(.34,1.56,.64,1); }
+  .choice.selected .emoji { animation: emoji-pop .5s cubic-bezier(.34,1.56,.64,1); }
+  .choice .ripple {
+    position: absolute; border-radius: 50%; pointer-events: none;
+    background: currentColor; opacity: 0.18;
+    transform: scale(0); animation: ripple .6s ease-out forwards;
+  }
+  @keyframes ripple {
+    to { transform: scale(4); opacity: 0; }
+  }
+  @keyframes select-bounce {
+    0% { transform: scale(1); }
+    35% { transform: scale(0.93); }
+    70% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+  @keyframes emoji-pop {
+    0% { transform: scale(0.4) rotate(-12deg); }
+    60% { transform: scale(1.35) rotate(6deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
   .reply-banner {
     display: none; padding: 12px 14px; border-radius: 10px;
     font-weight: 600; font-size: 0.95rem; margin-bottom: 16px;
+    position: relative; overflow: hidden;
   }
-  .reply-banner.show { display: block; }
+  .reply-banner.show {
+    display: block;
+    animation: banner-slide .45s cubic-bezier(.22,1,.36,1);
+  }
+  .reply-banner .banner-shine {
+    position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.55), transparent);
+    animation: shine 0.9s ease-out forwards;
+  }
+  @keyframes banner-slide {
+    0% { opacity: 0; transform: translateY(-8px) scale(0.97); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes shine {
+    to { left: 110%; }
+  }
   .reply-banner.yes { background: var(--accent-soft); color: var(--accent); }
   .reply-banner.no { background: var(--decline-soft); color: var(--decline); }
 
@@ -98,19 +148,33 @@
   .count-scale { padding: 4px 2px 0; }
   input[type="range"] {
     width: 100%; -webkit-appearance: none; appearance: none;
-    height: 8px; border-radius: 999px; background: var(--accent-soft);
+    height: 8px; border-radius: 999px;
+    background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--fill, 10%), var(--accent-soft) var(--fill, 10%));
     outline: none; border: none; cursor: pointer;
+    transition: height .15s ease;
   }
+  input[type="range"]:active { height: 12px; }
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none; appearance: none;
     width: 26px; height: 26px; border-radius: 50%;
     background: var(--accent); border: 3px solid #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.25); cursor: grab;
+    transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s;
+  }
+  input[type="range"]:active::-webkit-slider-thumb {
+    transform: scale(1.25);
+    box-shadow: 0 0 0 10px rgba(46,110,78,0.15), 0 3px 10px rgba(0,0,0,0.3);
+    cursor: grabbing;
   }
   input[type="range"]::-moz-range-thumb {
     width: 22px; height: 22px; border-radius: 50%;
     background: var(--accent); border: 3px solid #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.25); cursor: grab;
+    transition: transform .18s cubic-bezier(.34,1.56,.64,1);
+  }
+  input[type="range"]:active::-moz-range-thumb {
+    transform: scale(1.25);
+    box-shadow: 0 0 0 10px rgba(46,110,78,0.15), 0 3px 10px rgba(0,0,0,0.3);
   }
   .scale-ticks {
     display: flex; justify-content: space-between;
@@ -121,8 +185,32 @@
     display: flex; align-items: baseline; justify-content: center; gap: 8px;
     margin-top: 10px; padding: 10px;
     background: var(--accent-soft); border-radius: 10px;
+    transition: transform .2s ease, background .2s ease;
   }
-  .count-value { font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+  .count-value-row.pulse { animation: box-pulse .35s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes box-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.045); }
+    100% { transform: scale(1); }
+  }
+  .count-value {
+    display: inline-block;
+    font-size: 1.6rem; font-weight: 800; color: var(--accent);
+  }
+  .count-value.bump { animation: num-bump .3s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes num-bump {
+    0% { transform: scale(1); }
+    45% { transform: scale(1.45); }
+    100% { transform: scale(1); }
+  }
+  .scale-ticks span {
+    transition: color .15s, transform .15s;
+    border-radius: 6px;
+  }
+  .scale-ticks span.active {
+    color: var(--accent); font-weight: 800;
+    transform: scale(1.25);
+  }
   .count-caption { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
 
   /* Allergy dropdown */
@@ -153,6 +241,7 @@
   .select-option.selected { background: var(--accent); color: #fff; }
   .select-option .tick { visibility: hidden; font-weight: 800; }
   .select-option.selected .tick { visibility: visible; }
+  .select-option .opt-icon { font-size: 1.15rem; }
 
   label { display: block; font-size: 0.85rem; font-weight: 600; margin: 12px 0 6px; }
   input[type="text"], input[type="number"], textarea {
@@ -331,7 +420,7 @@
       lbl_allergy: "Alergi makanan atau nota pemakanan",
       lbl_optional: "(pilihan)",
       ph_allergy: "cth. Tak makan daging, alergi udang…",
-      submit: "Maklum Balas",
+      submit: "Hantar Maklum Balas",
       err: "Sila pilih Ya atau Tidak dan masukkan nama anda.",
       toast: "Terima kasih! RSVP anda telah direkodkan. ✨",
       s2_title: "Senarai Tetamu",
@@ -520,7 +609,29 @@
   }
 
   function updateCountLabel() {
-    document.getElementById("count-value").textContent = countEl.value;
+    const val = parseInt(countEl.value, 10);
+    const numEl = document.getElementById("count-value");
+    const row = document.querySelector(".count-value-row");
+    const prev = numEl.textContent;
+    numEl.textContent = countEl.value;
+
+    // Track fill behind the thumb (0–10)
+    countEl.style.setProperty("--fill", (val / 10 * 100) + "%");
+
+    // Highlight the active tick
+    document.querySelectorAll("#scale-ticks span").forEach((s, i) => {
+      s.classList.toggle("active", i === val);
+    });
+
+    // Pop animations when the number actually changes
+    if (prev !== countEl.value) {
+      numEl.classList.remove("bump");
+      void numEl.offsetWidth;
+      numEl.classList.add("bump");
+      row.classList.remove("pulse");
+      void row.offsetWidth;
+      row.classList.add("pulse");
+    }
   }
 
   // Build the 0–10 tick labels under the slider
@@ -539,6 +650,8 @@
     en: ["Beef", "Prawns/shellfish", "Fish", "Eggs", "Peanuts", "Tree nuts", "Dairy", "Gluten", "Spicy food", "Vegetarian"],
     ar: ["لحم البقر", "الروبيان/المحار", "السمك", "البيض", "الفول السوداني", "المكسرات", "منتجات الألبان", "الجلوتين", "الطعام الحار", "نباتي"]
   };
+  // Colored icon per option (same order as ALLERGY_OPTIONS)
+  const ALLERGY_ICONS = ["🥩", "🦐", "🐟", "🥚", "🥜", "🌰", "🥛", "🍞", "🌶️", "🥬"];
 
   let selectedAllergies = [];
 
@@ -546,11 +659,11 @@
     const menu = document.getElementById("allergy-menu");
     const toggleLabel = document.getElementById("allergy-toggle-label");
     menu.innerHTML = "";
-    ALLERGY_OPTIONS[lang].forEach(label => {
+    ALLERGY_OPTIONS[lang].forEach((label, idx) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "select-option" + (selectedAllergies.includes(label) ? " selected" : "");
-      btn.innerHTML = `<span class="tick">✓</span> <span>${label}</span>`;
+      btn.innerHTML = `<span class="tick">✓</span> <span class="opt-icon">${ALLERGY_ICONS[idx]}</span> <span>${label}</span>`;
       btn.addEventListener("click", () => {
         const i = selectedAllergies.indexOf(label);
         if (i >= 0) selectedAllergies.splice(i, 1); else selectedAllergies.push(label);
@@ -583,13 +696,37 @@
     }
   });
 
+  // Tap ripple effect on the yes/no buttons
+  function addRipple(e) {
+    const btn = e.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const x = (e.clientX || rect.left + rect.width / 2) - rect.left;
+    const y = (e.clientY || rect.top + rect.height / 2) - rect.top;
+    const size = Math.max(rect.width, rect.height);
+    const r = document.createElement("span");
+    r.className = "ripple";
+    r.style.width = r.style.height = size + "px";
+    r.style.left = (x - size / 2) + "px";
+    r.style.top = (y - size / 2) + "px";
+    btn.appendChild(r);
+    setTimeout(() => r.remove(), 650);
+  }
+  [btnYes, btnNo].forEach(b => b.addEventListener("pointerdown", addRipple));
+
+  // Restart the bounce animation even when re-tapping the same choice
+  [btnYes, btnNo].forEach(b => b.addEventListener("click", () => {
+    b.style.animation = "none";
+    void b.offsetWidth; // reflow to reset
+    b.style.animation = "";
+  }));
+
   function setChoice(val) {
     choice = val;
     btnYes.classList.toggle("selected", val === true);
     btnNo.classList.toggle("selected", val === false);
     banner.classList.add("show");
     banner.className = "reply-banner show " + (val ? "yes" : "no");
-    banner.textContent = val ? t("banner_yes") : t("banner_no");
+    banner.innerHTML = '<span class="banner-shine"></span>' + (val ? t("banner_yes") : t("banner_no"));
     document.getElementById("details-fields").style.display = "block";
     formError.style.display = "none";
   }
@@ -612,20 +749,15 @@
       ? (selectedAllergies.length ? selectedAllergies.join(", ") : "No allergies noted")
       : "—";
     guests.push({ name, coming: count, allergy, attending: choice });
-    renderList();
-    formError.style.display = "none";
-    toast.style.display = "block";
-    setTimeout(() => { toast.style.display = "none"; }, 3500);
-    nameEl.value = "";
-    countEl.value = "1";
-    updateCountLabel();
-    selectedAllergies = [];
-    renderChips();
-    choice = null;
-    btnYes.classList.remove("selected");
-    btnNo.classList.remove("selected");
-      banner.classList.remove("show");
+    // Hand the response to the confirmation page via URL (nothing stored)
+    const q = new URLSearchParams({
+      name, reply: choice ? "yes" : "no",
+      count: choice ? count : "",
+      allergy: choice ? allergy : "",
+      lang
     });
+    location.href = "thankyou.html?" + q.toString();
+  });
 
   applyLang();
   renderList();

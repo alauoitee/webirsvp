@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maklum Balas Diterima — Solemnization of Ahmad &amp; Fatimah</title>
+<style>
+  :root {
+    --bg: #f6f4ef;
+    --card: #ffffff;
+    --ink: #2b2b26;
+    --muted: #6f6d64;
+    --accent: #2e6e4e;
+    --accent-soft: #e4f0e9;
+    --decline: #a1502e;
+    --decline-soft: #f7e9e2;
+    --border: #e4e1d8;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .wrap { max-width: 520px; margin: 0 auto; padding: 32px 16px 48px; }
+  header.hero {
+    text-align: center;
+    padding: 40px 16px 36px;
+    color: #f7f5ef;
+    border-radius: 0 0 var(--radius) var(--radius);
+    background:
+      linear-gradient(180deg, rgba(20, 42, 30, 0.55), rgba(20, 42, 30, 0.75)),
+      url("https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=60")
+      center 40% / cover no-repeat,
+      linear-gradient(160deg, #2e6e4e, #1f4f37);
+  }
+  @font-face {
+    font-family: "Vintage Heirloom";
+    src: url("GreatVibes.ttf") format("truetype");
+    font-display: swap;
+  }
+  header.hero h1 {
+    font-family: "Vintage Heirloom", "Great Vibes", "Segoe Script", cursive;
+    font-size: 2.1rem; font-weight: 400;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+  }
+
+  section.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 22px;
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  /* Animated success checkmark */
+  .check-wrap {
+    width: 96px; height: 96px; margin: 4px auto 18px;
+    background: var(--accent-soft); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    animation: circle-pop .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .check-wrap svg { width: 52px; height: 52px; }
+  .check-path {
+    stroke: var(--accent); stroke-width: 6; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 48; stroke-dashoffset: 48;
+    animation: draw .5s .35s ease-out forwards;
+  }
+  @keyframes circle-pop {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .card h2 { font-size: 1.25rem; margin-bottom: 8px; animation: rise .5s .5s both; }
+  .card .msg { color: var(--muted); font-size: 0.95rem; animation: rise .5s .65s both; }
+  .card .msg strong { color: var(--accent); }
+  .detail-box {
+    margin: 20px auto 0; padding: 14px 16px;
+    background: var(--accent-soft); border-radius: 12px;
+    font-size: 0.92rem; text-align: start;
+    animation: rise .5s .8s both;
+  }
+  .detail-box div { padding: 3px 0; }
+  .detail-box .k { color: var(--muted); font-weight: 600; margin-inline-end: 6px; }
+  .note {
+    margin-top: 18px; font-size: 0.82rem; color: var(--muted);
+    animation: rise .5s .95s both;
+  }
+  .home-btn {
+    display: inline-block; margin-top: 20px; padding: 13px 34px;
+    background: var(--accent); color: #fff; border: none;
+    border-radius: 10px; font-size: 1rem; font-weight: 700;
+    cursor: pointer; text-decoration: none;
+    transition: transform .15s, box-shadow .15s;
+    animation: rise .5s 1.05s both;
+  }
+  .home-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(46,110,78,0.25); }
+  .home-btn:active { transform: scale(0.96); }
+
+  .confetti {
+    position: fixed; top: -12px; font-size: 1.2rem;
+    animation: fall linear forwards; pointer-events: none; z-index: 5;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(540deg); opacity: 0.6; }
+  }
+  @keyframes rise {
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 26px; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>Solemnization of Ahmad &amp; Fatimah</h1>
+</header>
+
+<div class="wrap">
+  <section class="card">
+    <div class="check-wrap">
+      <svg viewBox="0 0 52 52"><path class="check-path" d="M14 27 L23 36 L38 18"/></svg>
+    </div>
+    <h2 id="title">Maklum balas anda telah dihantar!</h2>
+    <p class="msg" id="message">Terima kasih, <strong id="gname"></strong>. Kami telah menerima maklum balas anda.</p>
+
+    <div class="detail-box" id="detail-box">
+      <div><span class="k" id="k-name">Nama:</span><span id="d-name"></span></div>
+      <div><span class="k" id="k-reply">Balasan:</span><span id="d-reply"></span></div>
+      <div id="d-count-row"><span class="k" id="k-count">Bilangan hadir:</span><span id="d-count"></span></div>
+      <div id="d-allergy-row"><span class="k" id="k-allergy">Alergi/nota:</span><span id="d-allergy"></span></div>
+    </div>
+
+    <p class="note" id="note">Sila ambil perhatian: maklumat ini tidak disimpan selepas anda menutup halaman ini. Sila maklumkan kepada tuan rumah sekiranya ada perubahan.</p>
+
+    <a class="home-btn" href="index.html" id="back-btn">Kembali ke halaman jemputan</a>
+  </section>
+
+  <footer>Solemnization of Ahmad &amp; Fatimah · Dewan Seri Melati, Shah Alam</footer>
+</div>
+
+<script>
+  // Read what the guest submitted from the URL (no storage)
+  const params = new URLSearchParams(location.search);
+  const name = params.get("name") || "";
+  const reply = params.get("reply") || "";
+  const count = params.get("count") || "";
+  const allergy = params.get("allergy") || "";
+  const lang = params.get("lang") || "ms";
+
+  const T = {
+    ms: {
+      title_yes: "Maklum balas anda telah dihantar!",
+      msg_yes: "Terima kasih, [NAMA]. Kami tidak sabar menanti kehadiran anda!",
+      msg_no: "Terima kasih, [NAMA]. Perhatian anda dihargai — semoga berjumpa di lain masa.",
+      title_no: "Maklum balas anda telah dihantar!",
+      k_name: "Nama:", k_reply: "Balasan:", k_count: "Bilangan hadir:", k_allergy: "Alergi/nota:",
+      yes: "Ya, saya hadir", no: "Tidak, saya tak dapat datang",
+      none: "Tiada",
+      note: "Sila ambil perhatian: maklumat ini tidak disimpan selepas anda menutup halaman ini. Sila maklumkan kepada tuan rumah sekiranya ada perubahan.",
+      back: "Kembali ke halaman jemputan",
+      guests: "tetamu"
+    },
+    en: {
+      title_yes: "Your response has been sent!",
+      msg_yes: "Thank you, [NAMA]. We can't wait to see you there!",
+      msg_no: "Thank you, [NAMA]. Your kind reply is appreciated — hope to see you another time.",
+      title_no: "Your response has been sent!",
+      k_name: "Name:", k_reply: "Reply:", k_count: "Number coming:", k_allergy: "Allergy/note:",
+      yes: "Yes, I'll attend", no: "No, can't make it",
+      none: "None",
+      note: "Please note: this information is not saved after you close this page. Kindly inform the host of any changes.",
+      back: "Back to the invitation page",
+      guests: "guests"
+    },
+    ar: {
+      title_yes: "تم إرسال ردك!",
+      msg_yes: "شكراً لك يا [NAMA]. نتشوق لرؤيتك هناك!",
+      msg_no: "شكراً لك يا [NAMA]. نقدر ردك اللطيف — نأمل أن نلتقي في وقت آخر.",
+      title_no: "تم إرسال ردك!",
+      k_name: "الاسم:", k_reply: "الرد:", k_count: "عدد الحاضرين:", k_allergy: "الحساسية/ملاحظة:",
+      yes: "نعم، سأحضر", no: "لا، لا أستطيع الحضور",
+      none: "لا شيء",
+      note: "يرجى الملاحظة: لا يتم حفظ هذه المعلومات بعد إغلاق هذه الصفحة. يرجى إبلاغ المضيف بأي تغييرات.",
+      back: "العودة إلى صفحة الدعوة",
+      guests: "ضيوف"
+    }
+  };
+  const tr = T[lang] || T.ms;
+
+  const attending = reply === "yes";
+  const safeName = name.replace(/[<>&"]/g, "");
+
+  // Fill the summary box with what the guest entered
+  document.getElementById("title").textContent = attending ? tr.title_yes : tr.title_no;
+  const msgEl = document.getElementById("message");
+  msgEl.innerHTML = (attending ? tr.msg_yes : tr.msg_no).replace("[NAMA]", "<strong>" + safeName + "</strong>");
+  document.getElementById("gname").textContent = safeName;
+  document.getElementById("d-name").textContent = safeName || "—";
+  document.getElementById("d-reply").textContent = reply === "no" ? tr.no : tr.yes;
+  document.getElementById("d-count").textContent = count ? count + " " + tr.guests : tr.none;
+  document.getElementById("d-allergy").textContent = allergy || tr.none;
+  document.getElementById("k-name").textContent = tr.k_name;
+  document.getElementById("k-reply").textContent = tr.k_reply;
+  document.getElementById("k-count").textContent = tr.k_count;
+  document.getElementById("k-allergy").textContent = tr.k_allergy;
+  document.getElementById("note").textContent = tr.note;
+  document.getElementById("back-btn").textContent = tr.back;
+  if (!attending) {
+    document.getElementById("d-count-row").style.display = "none";
+    document.getElementById("d-allergy-row").style.display = "none";
+    document.querySelector(".check-wrap").style.background = "var(--decline-soft)";
+    document.querySelector(".check-path").style.stroke = "var(--decline)";
+  }
+
+  // Gentle confetti for attendees
+  if (attending) {
+    const icons = ["🎉", "🌸", "✨", "💚", "🌼"];
+    for (let i = 0; i < 18; i++) {
+      const c = document.createElement("span");
+      c.className = "confetti";
+      c.textContent = icons[i % icons.length];
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.animationDuration = (2.5 + Math.random() * 2.5) + "s";
+      c.style.animationDelay = (Math.random() * 1.5) + "s";
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 6000);
+    }
+  }
+</script>
+</body>
+</html>
